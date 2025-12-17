@@ -12,6 +12,7 @@
             --bg: #f3f4f6;
             --text: #1f2937;
             --white: #ffffff;
+            --success: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,7 +21,7 @@
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
-            overflow: hidden; /* Pour l'effet slide */
+            overflow: hidden;
             height: 100vh;
         }
 
@@ -84,7 +85,6 @@
             max-width: 1200px;
             display: grid;
             gap: 2rem;
-            /* Default grid */
             grid-template-columns: 1fr; 
         }
 
@@ -221,7 +221,7 @@
             </div>
         </div>
 
-        <!-- Slide 2: Design & Produit (presentationKO) -->
+        <!-- Slide 2: Design & Produit -->
         <div class="slide" id="slide2">
             <div class="slide-header">
                 <span class="rubric-tag">Présentation & Design</span>
@@ -230,6 +230,7 @@
             <div class="content-wrapper grid-2">
                 <div class="card">
                     <h3>Design & Flyer</h3>
+                    <!-- Image corrigée sans le slash -->
                     <div class="img-container">
                         <img src="flyer_and_img.jpeg" alt="Flyer Promotionnel">
                     </div>
@@ -247,7 +248,7 @@
             </div>
         </div>
 
-        <!-- Slide 3: Planning & Gantt (ganttKO) -->
+        <!-- Slide 3: Planning & Gantt -->
         <div class="slide" id="slide3">
             <div class="slide-header">
                 <span class="rubric-tag">Planification</span>
@@ -292,7 +293,7 @@
             </div>
         </div>
 
-        <!-- Slide 4: Équipe & Compétences (skillsKO, profilesKO) -->
+        <!-- Slide 4: Équipe & Compétences -->
         <div class="slide" id="slide4">
             <div class="slide-header">
                 <span class="rubric-tag">Ressources Humaines</span>
@@ -317,7 +318,7 @@
             </div>
         </div>
 
-        <!-- Slide 5: Ressources Matérielles (resourcesKO) -->
+        <!-- Slide 5: Ressources Matérielles -->
         <div class="slide" id="slide5">
             <div class="slide-header">
                 <span class="rubric-tag">Matériel</span>
@@ -335,7 +336,7 @@
             </div>
         </div>
 
-        <!-- Slide 6: Risques (risksKO) -->
+        <!-- Slide 6: Risques -->
         <div class="slide" id="slide6">
             <div class="slide-header">
                 <span class="rubric-tag">Analyse de Risques</span>
@@ -363,7 +364,7 @@
             </div>
         </div>
 
-        <!-- Slide 7: Qualité (qualityKO) -->
+        <!-- Slide 7: Qualité -->
         <div class="slide" id="slide7">
             <div class="slide-header">
                 <span class="rubric-tag">Assurance Qualité</span>
@@ -389,7 +390,7 @@
             </div>
         </div>
 
-        <!-- Slide 8: Marketing & Comms (communicationsKO) -->
+        <!-- Slide 8: Marketing & Comms -->
         <div class="slide" id="slide8">
             <div class="slide-header">
                 <span class="rubric-tag">Communication</span>
@@ -410,7 +411,7 @@
             </div>
         </div>
 
-        <!-- Slide 9: Budget (budgetKO) -->
+        <!-- Slide 9: Budget -->
         <div class="slide" id="slide9">
             <div class="slide-header">
                 <span class="rubric-tag">Finance</span>
@@ -436,8 +437,33 @@
             </div>
         </div>
 
-        <!-- Slide 10: Conclusion (perfectionKO) -->
+        <!-- Slide 10: Prix & Rentabilité (NEW) -->
         <div class="slide" id="slide10">
+            <div class="slide-header">
+                <span class="rubric-tag">Business Model</span>
+                <h2>Fixation du Prix & Rentabilité</h2>
+            </div>
+            <div class="content-wrapper grid-2">
+                <div class="card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; border-left-color: var(--success);">
+                    <h3>Prix Public Conseillé</h3>
+                    <div style="font-size: 4rem; font-weight: 800; color: var(--success); margin: 1rem 0;">5 000 €</div>
+                    <span style="background: #ecfdf5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight:bold;">Seuil de Rentabilité</span>
+                </div>
+                <div class="card">
+                    <h3>Structure & Justification</h3>
+                    <ul style="line-height: 1.8;">
+                        <li><strong>Coût de revient :</strong> ~1 600 € (Matériel + Assemblage).</li>
+                        <li><strong>Marge Commerciale :</strong> Couverture des frais de distribution, marketing et logistique.</li>
+                        <li><strong>Amortissement R&D :</strong> Rentabilisation du développement logiciel et IA.</li>
+                        <li><strong>Positionnement :</strong> Alignement sur le segment Luxe/Premium.</li>
+                    </ul>
+                    <p style="margin-top:1rem; font-style:italic; font-size:0.9rem;">Avec tous les éléments en notre possession, ce prix de vente permet d'assurer la viabilité pérenne du projet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Conclusion -->
+        <div class="slide" id="slide11">
             <div class="content-wrapper" style="text-align: center;">
                 <h2 style="margin-bottom: 2rem;">Conclusion</h2>
                 <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 2rem auto;">
@@ -453,7 +479,7 @@
     <div class="controls">
         <button class="control-btn" id="prevBtn">←</button>
         <div style="display: flex; align-items: center; font-weight: bold; color: #6b7280;">
-            <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">10</span>
+            <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">11</span>
         </div>
         <button class="control-btn" id="nextBtn">→</button>
     </div>
