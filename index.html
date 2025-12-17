@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soutenance Projet - Smart Fridge</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #06b6d4;
+            --bg: #f3f4f6;
+            --text: #1f2937;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden; /* Pour l'effet slide */
+            height: 100vh;
+        }
+
+        /* --- LAYOUT --- */
+        .slider-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 4rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* --- HEADER & TITLES --- */
+        .slide-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .rubric-tag {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- CONTENT GRIDS --- */
+        .content-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            gap: 2rem;
+            /* Default grid */
+            grid-template-columns: 1fr; 
+        }
+
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card h3 { color: var(--primary); margin-bottom: 1rem; }
+        .card p { margin-bottom: 1rem; line-height: 1.6; color: #4b5563; }
+        .card ul { padding-left: 1.5rem; color: #4b5563; }
+        .card li { margin-bottom: 0.5rem; }
+
+        /* --- BUTTONS & LINKS --- */
+        .btn-doc {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-doc:hover { background: var(--secondary); }
+        .btn-doc::after { content: " ↗"; margin-left: 5px; }
+
+        /* --- IMAGES PLACEHOLDERS --- */
+        .img-container {
+            width: 100%;
+            height: 300px;
+            background: #ddd;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- NAVIGATION --- */
+        .controls {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+            background: rgba(255,255,255,0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .control-btn:hover { background: rgba(0,0,0,0.05); }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* --- GANTT STYLE --- */
+        .gantt-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .gantt-label { width: 20%; font-weight: bold; }
+        .gantt-bar-container { flex: 1; background: #eee; height: 20px; border-radius: 10px; position: relative; }
+        .gantt-bar { height: 100%; border-radius: 10px; position: absolute; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem;}
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .slide { padding: 1rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            h2 { font-size: 1.8rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <!-- Slide 1: Introduction -->
+        <div class="slide active" id="slide1">
+            <div class="content-wrapper" style="text-align: center;">
+                <div style="font-size: 5rem; margin-bottom: 1rem;">❄️🤖</div>
+                <h1 style="font-size: 4rem; color: var(--secondary); margin-bottom: 1rem;">SMART FRIDGE</h1>
+                <h2 style="font-size: 1.5rem; color: #6b7280; font-weight: normal;">L'Intelligence Artificielle au service de votre cuisine</h2>
+                <div style="margin-top: 3rem; display: flex; gap: 2rem; justify-content: center;">
+                    <div class="rubric-tag">Innovation</div>
+                    <div class="rubric-tag">IoT</div>
+                    <div class="rubric-tag">Gestion de Projet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Design & Produit (presentationKO) -->
+        <div class="slide" id="slide2">
+            <div class="slide-header">
+                <span class="rubric-tag">Présentation & Design</span>
+                <h2>Le Produit</h2>
+            </div>
+            <div class="content-wrapper grid-2">
+                <div class="card">
+                    <h3>Design & Flyer</h3>
+                    <!-- PLACEHOLDER IMAGE: Remplace 'ton-flyer.jpg' par le nom de ton fichier image -->
+                    <div class="img-container">
+                        <img src="ton-flyer.jpg" alt="Flyer Promotionnel" onerror="this.src='https://via.placeholder.com/400x300?text=Inserer+Flyer+Ici'">
+                    </div>
+                    <p>Une esthétique moderne s'intégrant parfaitement aux cuisines contemporaines. Interface tactile intuitive et finitions premium.</p>
+                </div>
+                <div class="card">
+                    <h3>Fonctionnalités Clés</h3>
+                    <ul>
+                        <li>Gestion intelligente des stocks (DLC)</li>
+                        <li>Suggestions de recettes basées sur le contenu</li>
+                        <li>Mode économie d'énergie IA</li>
+                        <li>Connexion familiale multi-utilisateurs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Planning & Gantt (ganttKO) -->
+        <div class="slide" id="slide3">
+            <div class="slide-header">
+                <span class="rubric-tag">Planification</span>
+                <h2>Planning Prévisionnel (Gantt)</h2>
+            </div>
+            <div class="content-wrapper">
+                <div class="card" style="width: 100%;">
+                    <div class="gantt-chart">
+                        <div class="gantt-row">
+                            <div class="gantt-label">Conception</div>
+                            <div class="gantt-bar-container">
+                                <div class="gantt-bar" style="width: 30%; left: 0%; background: #3b82f6;">Q1 - Q2</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">Ressources</div>
+                            <div class="gantt-bar-container">
+                                <div class="gantt-bar" style="width: 20%; left: 20%; background: #10b981;">Q2</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">Proto & Dev</div>
+                            <div class="gantt-bar-container">
+                                <div class="gantt-bar" style="width: 40%; left: 30%; background: #8b5cf6;">Q2 - Q3</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">Beta Test</div>
+                            <div class="gantt-bar-container">
+                                <div class="gantt-bar" style="width: 30%; left: 60%; background: #f59e0b;">Q4 (Déc 2025)</div>
+                            </div>
+                        </div>
+                        <div class="gantt-row">
+                            <div class="gantt-label">Lancement</div>
+                            <div class="gantt-bar-container">
+                                <div class="gantt-bar" style="width: 15%; left: 85%; background: #ef4444;">2026</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Le planning met en évidence le chemin critique menant au lancement de la phase de test avec les 10 familles fin 2025.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Équipe & Compétences (skillsKO, profilesKO) -->
+        <div class="slide" id="slide4">
+            <div class="slide-header">
+                <span class="rubric-tag">Ressources Humaines</span>
+                <h2>L'Équipe Projet</h2>
+            </div>
+            <div class="content-wrapper grid-3">
+                <div class="card">
+                    <h3>Chef de Projet IoT</h3>
+                    <p><strong>Compétences :</strong> Agile, Scrum, Leadership, Gestion des risques.</p>
+                    <p><strong>Mission :</strong> Coordination globale et respect du Gantt.</p>
+                </div>
+                <div class="card">
+                    <h3>Ingénieur Tech</h3>
+                    <p><strong>Compétences :</strong> C++, Python, Hardware, Capteurs, Sécurité.</p>
+                    <p><strong>Mission :</strong> Développement du firmware et intégration capteurs.</p>
+                </div>
+                <div class="card">
+                    <h3>Marketing Manager</h3>
+                    <p><strong>Compétences :</strong> Étude de marché, SEO, Communication, UX.</p>
+                    <p><strong>Mission :</strong> Lancement commercial et programme Beta.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Ressources Matérielles (resourcesKO) -->
+        <div class="slide" id="slide5">
+            <div class="slide-header">
+                <span class="rubric-tag">Matériel</span>
+                <h2>Ressources Techniques</h2>
+            </div>
+            <div class="content-wrapper">
+                <div class="card" style="text-align: center;">
+                    <h3>Inventaire & Équipements</h3>
+                    <p>Liste exhaustive des capteurs, microcontrôleurs, matériaux de structure et outils de développement nécessaires à la réalisation du prototype.</p>
+                    <div class="img-container" style="height: 150px; background: transparent;">
+                        <span style="font-size: 4rem;">🛠️ 📟 🔌</span>
+                    </div>
+                    <a href="https://leperefouras.github.io/ressources_materiel_smart_fridge/" target="_blank" class="btn-doc">Voir l'inventaire complet</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Risques (risksKO) -->
+        <div class="slide" id="slide6">
+            <div class="slide-header">
+                <span class="rubric-tag">Analyse de Risques</span>
+                <h2>Matrice des Risques</h2>
+            </div>
+            <div class="content-wrapper grid-3">
+                <div class="card" style="border-left-color: #ef4444;">
+                    <h3>Cyber-sécurité</h3>
+                    <p><strong>Probabilité :</strong> Moyenne<br><strong>Impact :</strong> Critique</p>
+                    <p><em>Action :</em> Audit sécurité externe + Chiffrement AES-256.</p>
+                </div>
+                <div class="card" style="border-left-color: #f59e0b;">
+                    <h3>Rupture Composants</h3>
+                    <p><strong>Probabilité :</strong> Forte<br><strong>Impact :</strong> Fort</p>
+                    <p><em>Action :</em> Stock tampon et diversification fournisseurs.</p>
+                </div>
+                <div class="card" style="border-left-color: #3b82f6;">
+                    <h3>Adoption Utilisateur</h3>
+                    <p><strong>Probabilité :</strong> Faible<br><strong>Impact :</strong> Moyen</p>
+                    <p><em>Action :</em> Programme Beta Testeurs intensif.</p>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="https://sopcharles.github.io/risque/" target="_blank" class="btn-doc">Consulter l'analyse complète</a>
+            </div>
+        </div>
+
+        <!-- Slide 7: Qualité (qualityKO) -->
+        <div class="slide" id="slide7">
+            <div class="slide-header">
+                <span class="rubric-tag">Assurance Qualité</span>
+                <h2>Démarche Qualité</h2>
+            </div>
+            <div class="content-wrapper grid-2">
+                <div class="card">
+                    <h3>Normes & Conformité</h3>
+                    <ul>
+                        <li>Marquage CE et norme RoHS (Environnement).</li>
+                        <li>Respect du RGPD pour les données utilisateurs.</li>
+                        <li>Tests de sécurité électrique (ISO).</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Cycle d'Amélioration Continue</h3>
+                    <ul>
+                        <li>Tests unitaires automatisés sur le code.</li>
+                        <li>Validation par phase (Alpha en labo, Beta en famille).</li>
+                        <li>Système de feedback utilisateur intégré à l'app.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Marketing & Comms (communicationsKO) -->
+        <div class="slide" id="slide8">
+            <div class="slide-header">
+                <span class="rubric-tag">Communication</span>
+                <h2>Plan Marketing & Commercial</h2>
+            </div>
+            <div class="content-wrapper grid-2">
+                <div class="card">
+                    <h3>Stratégie Externe</h3>
+                    <p>Positionnement Premium ("Luxe Utile"). Campagne ciblée sur les familles tech-savvy. Utilisation des réseaux sociaux et influenceurs "Home & Déco".</p>
+                    <a href="https://leperefouras.github.io/Plan-Marketing-et-Commercial/" target="_blank" class="btn-doc">Voir le Plan Marketing</a>
+                </div>
+                <div class="card">
+                    <h3>Communication Interne</h3>
+                    <p>Rapports hebdomadaires (Slack/Trello).<br>
+                    Réunions de revue de sprint (Agile).<br>
+                    Documentation technique partagée (GitHub).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Budget (budgetKO) -->
+        <div class="slide" id="slide9">
+            <div class="slide-header">
+                <span class="rubric-tag">Finance</span>
+                <h2>Budget Prévisionnel (Beta Test)</h2>
+            </div>
+            <div class="content-wrapper">
+                <div class="card" style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="font-size: 3rem; font-weight: bold; color: #10b981; margin-bottom: 1rem;">7 500 €</div>
+                    <p>Budget total recommandé pour la phase de lancement Beta (10 familles).</p>
+                    <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem; text-align: center;">
+                        <div style="background: #ecfdf5; padding: 1rem; border-radius: 8px;">
+                            <strong>Logistique</strong><br>6 000 €
+                        </div>
+                        <div style="background: #ecfdf5; padding: 1rem; border-radius: 8px;">
+                            <strong>Sécurité</strong><br>1 500 €
+                        </div>
+                        <div style="background: #ecfdf5; padding: 1rem; border-radius: 8px;">
+                            <strong>ROI Potentiel</strong><br>Rachat matériel
+                        </div>
+                    </div>
+                    <a href="https://leperefouras.github.io/Programme-Beta-Testeurs-Smart-Fridge/" target="_blank" class="btn-doc">Détail du Budget</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Conclusion (perfectionKO) -->
+        <div class="slide" id="slide10">
+            <div class="content-wrapper" style="text-align: center;">
+                <h2 style="margin-bottom: 2rem;">Conclusion</h2>
+                <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 2rem auto;">
+                    Le projet Smart Fridge est structuré, budgété et prêt pour sa phase critique de Beta Test. L'ensemble des risques a été identifié et les plans de mitigation sont en place.
+                </p>
+                <div style="font-size: 3rem;">🚀</div>
+                <p style="margin-top: 2rem; color: #6b7280;">Merci de votre attention.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="controls">
+        <button class="control-btn" id="prevBtn">←</button>
+        <div style="display: flex; align-items: center; font-weight: bold; color: #6b7280;">
+            <span id="currentSlideNum">1</span> / <span id="totalSlidesNum">10</span>
+        </div>
+        <button class="control-btn" id="nextBtn">→</button>
+    </div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideNum = document.getElementById('currentSlideNum');
+        const totalSlidesNum = document.getElementById('totalSlidesNum');
+        const progressBar = document.getElementById('progressBar');
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        totalSlidesNum.textContent = totalSlides;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            currentSlideNum.textContent = currentSlide + 1;
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            prevBtn.disabled = currentSlide === 0;
+            prevBtn.style.opacity = currentSlide === 0 ? 0.3 : 1;
+            
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            nextBtn.style.opacity = currentSlide === totalSlides - 1 ? 0.3 : 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Swipe Tactile
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        document.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextSlide();
+            if (touchEndX - touchStartX > 50) prevSlide();
+        }, {passive: true});
+
+        updateSlide();
+    </script>
+</body>
+</html>
