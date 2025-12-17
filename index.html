@@ -13,6 +13,7 @@
             --text: #1f2937;
             --white: #ffffff;
             --success: #10b981;
+            --warning: #f59e0b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -107,6 +108,16 @@
         .card ul { padding-left: 1.5rem; color: #4b5563; }
         .card li { margin-bottom: 0.5rem; }
 
+        /* --- TABLES --- */
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .table-custom th { text-align: left; color: #6b7280; padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; }
+        .table-custom td { padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; }
+        .table-custom .highlight { font-weight: bold; color: var(--success); }
+
         /* --- BUTTONS & LINKS --- */
         .btn-doc {
             display: inline-flex;
@@ -195,12 +206,24 @@
         .gantt-bar-container { flex: 1; background: #eee; height: 20px; border-radius: 10px; position: relative; }
         .gantt-bar { height: 100%; border-radius: 10px; position: absolute; display:flex; align-items:center; justify-content:center; color:white; font-size:0.8rem;}
 
+        /* --- STATS CARDS (Slide 10) --- */
+        .stat-card {
+            text-align: center; 
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .stat-value { font-size: 2.5rem; font-weight: 800; margin: 0.5rem 0; }
+        .stat-label { font-size: 0.9rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+
         /* --- MOBILE --- */
         @media (max-width: 768px) {
             .slide { padding: 1rem; }
             .grid-2, .grid-3 { grid-template-columns: 1fr; }
             h2 { font-size: 1.8rem; }
             .card { padding: 1.5rem; }
+            .stat-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -230,9 +253,9 @@
             <div class="content-wrapper grid-2">
                 <div class="card">
                     <h3>Design & Flyer</h3>
-                    <!-- Image corrigée sans le slash -->
+                    <!-- Image corrigée -->
                     <div class="img-container">
-                        <img src="flyer_and_img.jpeg" alt="Flyer Promotionnel">
+                        <img src="flyer_and_img.jpeg" alt="Flyer Promotionnel" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Manquante'">
                     </div>
                     <p>Une esthétique moderne s'intégrant parfaitement aux cuisines contemporaines. Interface tactile intuitive et finitions premium.</p>
                 </div>
@@ -437,27 +460,72 @@
             </div>
         </div>
 
-        <!-- Slide 10: Prix & Rentabilité (NEW) -->
+        <!-- Slide 10: Prix & Rentabilité (MISE À JOUR) -->
         <div class="slide" id="slide10">
             <div class="slide-header">
                 <span class="rubric-tag">Business Model</span>
-                <h2>Fixation du Prix & Rentabilité</h2>
+                <h2>Stratégie Prix & Rentabilité</h2>
             </div>
-            <div class="content-wrapper grid-2">
-                <div class="card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; border-left-color: var(--success);">
-                    <h3>Prix Public Conseillé</h3>
-                    <div style="font-size: 4rem; font-weight: 800; color: var(--success); margin: 1rem 0;">5 000 €</div>
-                    <span style="background: #ecfdf5; color: #065f46; padding: 0.5rem 1rem; border-radius: 20px; font-weight:bold;">Seuil de Rentabilité</span>
+
+            <!-- Top Stats Row -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; max-width: 1200px; margin-bottom: 1.5rem;" class="stat-grid">
+                <div class="stat-card">
+                    <h3 style="margin:0; font-size: 1rem; color: #4b5563;">Prix de Vente</h3>
+                    <div class="stat-value" style="color: var(--secondary);">4 999 €</div>
+                    <span class="stat-label">Ultra-Premium</span>
                 </div>
+                <div class="stat-card">
+                    <h3 style="margin:0; font-size: 1rem; color: #4b5563;">CA Prévisionnel</h3>
+                    <div class="stat-value" style="color: var(--success);">4,99 M€</div>
+                    <span class="stat-label">Obj: 1 000 unités</span>
+                </div>
+                <div class="stat-card">
+                    <h3 style="margin:0; font-size: 1rem; color: #4b5563;">ROI Marketing</h3>
+                    <div class="stat-value" style="color: var(--warning);">9.9</div>
+                    <span class="stat-label">Budget: 500 K€ (10%)</span>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-wrapper grid-2">
+                <!-- Left: Marketing Strategy -->
                 <div class="card">
-                    <h3>Structure & Justification</h3>
-                    <ul style="line-height: 1.8;">
-                        <li><strong>Coût de revient :</strong> ~1 600 € (Matériel + Assemblage).</li>
-                        <li><strong>Marge Commerciale :</strong> Couverture des frais de distribution, marketing et logistique.</li>
-                        <li><strong>Amortissement R&D :</strong> Rentabilisation du développement logiciel et IA.</li>
-                        <li><strong>Positionnement :</strong> Alignement sur le segment Luxe/Premium.</li>
-                    </ul>
-                    <p style="margin-top:1rem; font-style:italic; font-size:0.9rem;">Avec tous les éléments en notre possession, ce prix de vente permet d'assurer la viabilité pérenne du projet.</p>
+                    <h3>Répartition Budget Marketing</h3>
+                    <p style="font-size: 0.9rem;">Le budget n'est plus une contrainte mais un levier d'accélération (Focus CSP+).</p>
+                    <table class="table-custom">
+                        <tr><td>Publicité TV (Canal+, Arte)</td><td style="font-weight:bold;">25%</td><td style="color:#6b7280;">125 k€</td></tr>
+                        <tr><td>Digital Ads (Google, LinkedIn)</td><td style="font-weight:bold;">27%</td><td style="color:#6b7280;">135 k€</td></tr>
+                        <tr><td>Influence & RP</td><td style="font-weight:bold;">16%</td><td style="color:#6b7280;">80 k€</td></tr>
+                        <tr><td style="border-bottom:none;">Réserve & Autres</td><td style="font-weight:bold; border-bottom:none;">32%</td><td style="color:#6b7280; border-bottom:none;">160 k€</td></tr>
+                    </table>
+                </div>
+
+                <!-- Right: Comparative Analysis -->
+                <div class="card">
+                    <h3>Impact Rentabilité</h3>
+                    <p style="font-size: 0.9rem;">Transformation de l'équation économique par rapport à l'ancien prix (2.8k€).</p>
+                    <table class="table-custom" style="margin-top: 1rem;">
+                        <thead style="background: #f3f4f6;">
+                            <tr>
+                                <th style="padding-left:0.5rem;">Indicateur</th>
+                                <th style="text-align:center;">Ancien</th>
+                                <th style="text-align:center; color: var(--success);">Nouveau</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left:0.5rem;">Marge Unitaire</td>
+                                <td style="text-align:center;">1 200 €</td>
+                                <td style="text-align:center;" class="highlight">3 399 €</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:0.5rem; border-bottom:none;">Seuil Rentabilité</td>
+                                <td style="text-align:center; border-bottom:none;">417 ut.</td>
+                                <td style="text-align:center; border-bottom:none;" class="highlight">147 ut.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="https://leperefouras.github.io/estimation_prix/" target="_blank" class="btn-doc" style="width: 100%; justify-content: center; margin-top: 1.5rem;">Détail Stratégie & Coûts</a>
                 </div>
             </div>
         </div>
